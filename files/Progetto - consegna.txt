@@ -1,0 +1,9 @@
+Consegna del Progetto di Laboratorio per sostenere l'appello d'esame il 29/01/2018.
+Consegnare in un unico file .zip:
+- file .bos contenente il BPMN sviluppato
+- relazione in .pdf che deve contenere:
+
+	•	descrizione progetto database (schema UML + schema relazionale + SQL di creazione del DB) 
+	•	descrizione progetto del processo di procuremenet in BPMN 
+	•	descrizione progetto della Data Warehouse (DFM + Star Schema + SQL di creazione dello Star Schema) 
+	•	Query SQL che implementano le interrogazioni OLAP richieste.

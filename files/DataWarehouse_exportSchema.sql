@@ -40,9 +40,9 @@ SET default_with_oids = false;
 
 CREATE TABLE "DataDT" (
     "dataId" integer NOT NULL,
-    giorno character varying,
-    mese character varying,
-    anno character varying
+    giorno integer NOT NULL,
+    mese integer NOT NULL,
+    anno integer NOT NULL
 );
 
 
@@ -52,9 +52,9 @@ CREATE TABLE "DataDT" (
 
 CREATE TABLE "LuogoDT" (
     "luogoId" integer NOT NULL,
-    citta character varying NOT NULL,
-    regione character varying NOT NULL,
-    stato character varying NOT NULL
+    citta "char" NOT NULL,
+    regione "char" NOT NULL,
+    stato "char" NOT NULL
 );
 
 
@@ -64,9 +64,21 @@ CREATE TABLE "LuogoDT" (
 
 CREATE TABLE "MembroDT" (
     "membroId" integer NOT NULL,
-    "tipoMembro" character varying,
-    dipartimento character varying,
-    ateneo character varying
+    "tipoMembro" "char" NOT NULL,
+    tutor "char" NOT NULL,
+    dipartimento "char" NOT NULL,
+    ateneo "char" NOT NULL
+);
+
+
+--
+-- Name: MembroTeamBT; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE "MembroTeamBT" (
+    "teamId" integer NOT NULL,
+    "membroId" integer NOT NULL,
+    weight double precision NOT NULL
 );
 
 
@@ -75,7 +87,7 @@ CREATE TABLE "MembroDT" (
 --
 
 CREATE TABLE "MissioneFT" (
-    "membroId" integer NOT NULL,
+    "teamId" integer NOT NULL,
     "progettoId" integer NOT NULL,
     "luogoId" integer NOT NULL,
     "dataInizioId" integer NOT NULL,
@@ -90,8 +102,16 @@ CREATE TABLE "MissioneFT" (
 
 CREATE TABLE "ProgettoDT" (
     "progettoId" integer NOT NULL,
-    "tipoProgetto" character varying NOT NULL,
-    nome character varying(30)
+    "tipoProgetto" "char" NOT NULL
+);
+
+
+--
+-- Name: TeamDT; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE "TeamDT" (
+    "teamId" integer NOT NULL
 );
 
 
@@ -120,11 +140,19 @@ ALTER TABLE ONLY "MembroDT"
 
 
 --
+-- Name: MembroTeamBT MembroTeamBT_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY "MembroTeamBT"
+    ADD CONSTRAINT "MembroTeamBT_pkey" PRIMARY KEY ("teamId", "membroId");
+
+
+--
 -- Name: MissioneFT MissioneFT_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY "MissioneFT"
-    ADD CONSTRAINT "MissioneFT_pkey" PRIMARY KEY ("membroId", "progettoId", "luogoId", "dataInizioId", "dataFineId");
+    ADD CONSTRAINT "MissioneFT_pkey" PRIMARY KEY ("teamId", "progettoId", "luogoId", "dataInizioId", "dataFineId");
 
 
 --
@@ -133,6 +161,30 @@ ALTER TABLE ONLY "MissioneFT"
 
 ALTER TABLE ONLY "ProgettoDT"
     ADD CONSTRAINT "ProgettoDT_pkey" PRIMARY KEY ("progettoId");
+
+
+--
+-- Name: TeamDT TeamDT_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY "TeamDT"
+    ADD CONSTRAINT "TeamDT_pkey" PRIMARY KEY ("teamId");
+
+
+--
+-- Name: MembroTeamBT MembroTeam_fk_membroId; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY "MembroTeamBT"
+    ADD CONSTRAINT "MembroTeam_fk_membroId" FOREIGN KEY ("membroId") REFERENCES "MembroDT"("membroId");
+
+
+--
+-- Name: MembroTeamBT MembroTeam_fk_teamId; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY "MembroTeamBT"
+    ADD CONSTRAINT "MembroTeam_fk_teamId" FOREIGN KEY ("teamId") REFERENCES "TeamDT"("teamId");
 
 
 --
@@ -160,19 +212,19 @@ ALTER TABLE ONLY "MissioneFT"
 
 
 --
--- Name: MissioneFT MissioneFT_fk_membroId; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY "MissioneFT"
-    ADD CONSTRAINT "MissioneFT_fk_membroId" FOREIGN KEY ("membroId") REFERENCES "MembroDT"("membroId");
-
-
---
 -- Name: MissioneFT MissioneFT_fk_progettoId; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY "MissioneFT"
     ADD CONSTRAINT "MissioneFT_fk_progettoId" FOREIGN KEY ("progettoId") REFERENCES "ProgettoDT"("progettoId");
+
+
+--
+-- Name: MissioneFT MissioneFT_fk_teamId; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY "MissioneFT"
+    ADD CONSTRAINT "MissioneFT_fk_teamId" FOREIGN KEY ("teamId") REFERENCES "TeamDT"("teamId");
 
 
 --
